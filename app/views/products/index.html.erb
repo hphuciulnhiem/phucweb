@@ -1,14 +1,111 @@
-<h1>Products</h1>
-<h1><%= t ".title" %></h1>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(120deg, #f3f4f6, #ffffff);
+      margin: 0;
+      padding: 20px;
+    }
 
-<%= link_to "New product", new_product_path if authenticated? %>
-<%= link_to "Login", new_session_path unless authenticated? %>
+    h1 {
+      text-align: center;
+      color: #4CAF50;
+      margin-bottom: 20px;
+    }
+
+    #products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .product-card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: scale(1.05);
+    }
+
+    .product-image {
+  width: 200px;
+  height: 500px;
+  object-fit: cover;
+  margin: 0 auto; /* Căn giữa hình ảnh trong thẻ div */
+  display: block;
+}
 
 
-<div id="products">
-  <% @products.each do |product| %>
-    <div>
-      <%= link_to product.name, product %>
-    </div>
-  <% end %>
-</div>
+    .product-info {
+      padding: 15px;
+      text-align: center;
+    }
+
+    .product-info a {
+      text-decoration: none;
+      color: #333;
+      font-size: 18px;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .product-info a:hover {
+      color: red;
+    }
+
+    .actions {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .actions a {
+      text-decoration: none;
+      padding: 10px 15px;
+      border: none;
+      background: #4CAF50;
+      color: white;
+      border-radius: 5px;
+      font-size: 16px;
+      margin: 0 10px;
+      transition: background 0.3s ease;
+    }
+
+    .actions a:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1><%= t ".title", default: "Products" %></h1>
+
+  <div class="actions">
+    <%= link_to "New product", new_product_path if authenticated? %>
+    <%= link_to "Login", new_session_path unless authenticated? %>
+  </div>
+
+  <div id="products">
+    <% @products.each do |product| %>
+      <div class="product-card">
+        <% if product.featured_image.attached? %>
+          <%= image_tag product.featured_image, class: "product-image" %>
+        <% else %>
+          <img src="https://via.placeholder.com/300x200?text=No+Image" alt="No image" class="product-image">
+        <% end %>
+        <div class="product-info">
+          <%= link_to product.name, product %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</body>
+</html>

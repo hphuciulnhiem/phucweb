@@ -1,36 +1,118 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= content_for(:title) || "App" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title><%= content_for(:title) || "App" %></title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= yield :head %>
+  
+  <style>
+    /* Đặt nền cho toàn bộ trang */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(120deg, #fdfbfb, #ebedee);
+    }
 
-    <%= yield :head %>
+    /* Định nghĩa cho menu */
+    .menu {
+      display: flex;
+      justify-content: center;
+      background-color: #4CAF50; /* Xanh lá cây */
+      padding: 10px 20px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+    .menu ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 15px;
+    }
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+    .menu li {
+      position: relative;
+    }
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-  </head>
+    .menu a, .menu-item {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      border-radius: 5px;
+    }
 
-  <body>
-    <div class="notice"><%= notice %></div>
-    <nav>
-      <%= link_to "Home", root_path %>
-      <%= button_to "Log out", session_path, method: :delete if authenticated? %>
-    </nav>
+    .menu a:hover, .menu-item:hover {
+      background-color: #45a049; /* Màu đậm hơn khi hover */
+      transform: scale(1.05);
+    }
 
-    <main>
-      <%= yield %>
-    </main>
-  </body>
+    /* Nổi bật nút Logout */
+    .logout {
+      background-color: #f44336; /* Màu đỏ */
+      color: white;
+    }
+
+    .logout:hover {
+      background-color: #d32f2f; /* Màu đỏ đậm hơn */
+    }
+
+    /* Responsive cho thiết bị nhỏ */
+    @media (max-width: 600px) {
+      .menu {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .menu ul {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="notice"><%= notice %></div>
+  
+  <nav class="menu">
+    <ul>
+      <!-- Home -->
+      <li>
+        <a href="<%= root_path %>">
+          Home
+        </a>
+      </li>
+
+      <!-- Login or Logout -->
+      <% if authenticated? %>
+        <!-- Logout -->
+        <li>
+          <%= button_to "Log out", session_path, method: :delete, class: "menu-item logout" %>
+        </li>
+      <% else %>
+        <!-- Login -->
+        <li>
+          <a href="<%= new_session_path %>">
+            Login
+          </a>
+        </li>
+      <% end %>
+    </ul>
+  </nav>
+
+  <main>
+    <%= yield %>
+  </main>
+</body>
 </html>
